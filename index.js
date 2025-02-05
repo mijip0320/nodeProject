@@ -13,12 +13,23 @@ const friends = [
     id: 1,
     name : 'Sir Isaac Newton'
     },
+     {
+    id: 2,
+    name : 'Albert Einstein'
+    },
 ]
 
 server.on('request', (req, res) => {
-    const items = req.url.split('/');
-
-    if (items[1]=== 'friends') {
+    const items = req.url.split('/')
+        if (req.method == 'POST' && items[1] === 'friends') {
+            req.on('data', (data) => {
+                const friend = data.toString();
+                console.log('Reqeuest: ', friend);
+                friends.push(JSON.parse(friend));
+               
+            });
+            req.pipe(res);
+    }else if (req.method === 'GET' && items[1]=== 'friends') {
 
         res.statusCode = 200;
         res.setHeader('Content-Type', 'application/json');
